@@ -10,8 +10,12 @@ public class ListaSimples implements ListaOperacoes {
     }
 
     public void exibirElementos() {
-        for (int i = 0; i < this.lista.length; i++) {
-            System.out.println("Lista[" + i + "] = " + this.lista[i]);
+        if(!estaVazio()){
+            System.out.print("['" + lista[0] + "'");
+            for (int i = 1; i < this.lista.length; i++) {
+                System.out.print(", '" + lista[i] + "'");
+            }
+            System.out.print("]\n");
         }
     }
 
@@ -96,82 +100,120 @@ public class ListaSimples implements ListaOperacoes {
 
     @Override
     public int removerTodas(String elemento) {
-        return 0;
+        if(!estaVazio()){
+            for(int i = 0; i<lista.length; i++){
+                if(lista[i] != null && lista[i].equals(elemento)){
+                    lista[i] = null;
+                }
+            }
+            System.out.println("Todos os elementos '" + elemento + "' foram removidas com sucesso.");
+        }else System.out.println("A lista está vazia.");
+        return -1;
     }
 
     @Override
     public int contar() {
+        int cont = 0;
+        if(!estaVazio()){
+            for(int i = 0; i < lista.length; i++){
+                if(lista[i] != null){
+                    cont++;
+                }
+            }
+            System.out.println("A quantidade de elementos na lista: " + cont);
+        } else{
+            System.out.println("A lista está vazia.");
+        }
         return 0;
     }
 
     @Override
     public int adicionarVarios(String[] elementos) {
-        return 0;
+        int adicionados = 0;
+        for(int i = 0; i < elementos.length; i++){
+            if(!estaCheia()){
+                lista[encontrarPosicaoVazia()] = elementos[i];
+                adicionados++;
+            } else{
+                break;
+            }
+        }
+        System.out.println("Foram adicionados " + adicionados + " nomes");
+        return adicionados;
     }
 
     @Override
     public String obter(int indice) {
-        return "";
+        if(indice >= 0 && indice < lista.length){
+            System.out.println("Nome " + lista[indice] + " encontrada na posição " + indice + " com sucesso.");
+            return lista[indice];
+        } else return null;
     }
 
     @Override
     public boolean inserir(int indice, String elemento) {
-        return false;
+        if (indice < 0 || indice > lista.length || estaCheia()) {
+            return false;
+        }
+
+        for(int i = lista.length - 1; i > indice; i--){
+            lista[i] = lista[i - 1];
+        }
+
+        lista[indice] = elemento;
+        System.out.println(elemento + " inserido na posição " + indice);
+        return true;
     }
 
     @Override
     public String removerPorIndice(int indice) {
-        return "";
+        if(indice >= 0 && indice < lista.length){
+            lista[indice] = null;
+            for (int i = indice; i < lista.length - 1; i++){
+                lista[i] = lista[i + 1];
+            }
+            lista[lista.length - 1] = null;
+            return lista[indice];
+        } else return null;
     }
 
     @Override
     public void limpar() {
-
+        lista = new String[0];
     }
 
     @Override
     public int ultimoIndiceDe(String elemento) {
-        return 0;
+        for(int i = lista.length - 1; i >= 0; i--){
+            if(lista[i] != null && lista[i].equals(elemento)){
+                System.out.println("A última ocorrência do elemento " + elemento + " fica no índice " + i);
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int contarOcorrencias(String elemento) {
         int cont = 0;
-
-        if (!estaVazio()) {
-            for (int i = 0; i < lista.length; i++) {
-                if (lista[i].equals(elemento)) {
-                    cont++;
-                }
+        for (int i = 0; i < lista.length - 1; i++){
+            if(lista[i] != null && lista[i].equalsIgnoreCase(elemento)){
+                cont++;
             }
-
-            if (cont == 0) {
-                System.out.println("Nenhuma ocorrência encontrada!");
-            }
-            System.out.println("Número de ocorrências do elemento " + elemento + ": " + cont);
-
-        } else System.out.println("A lista esta vazia!");
-
+        }
+        System.out.println("O elemento " + elemento + " possui " + cont + " ocorrências");
         return cont;
     }
 
     @Override
     public int substituir(String antigo, String novo) {
-        int sub = 0;
-
-        if (!estaVazio()) {
-            for (int i = 0; i < lista.length; i++) {
-                if (lista[i].equals(antigo)) {
-                    System.out.println("Substituição na posição [" + i + "]: " + antigo + " para " + novo);
-
-                    lista[i] = novo;
-                    sub++;
-                }
+        int quantidadeTrocas = 0;
+        for(int i = 0; i < lista.length - 1; i++){
+            if(lista[i] != null && lista[i].equals(antigo)){
+                lista[i] = novo;
+                quantidadeTrocas++;
             }
-        } else System.out.println("A lista está vazia!");
-
-        System.out.println("Total de Alterações: " + sub);
-
-        return sub;
+        }
+        return  quantidadeTrocas;
     }
 }

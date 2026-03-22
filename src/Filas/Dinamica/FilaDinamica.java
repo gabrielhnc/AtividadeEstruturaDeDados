@@ -1,5 +1,7 @@
 package Filas.Dinamica;
 
+import Atividade_2.PilhaDinamica.NoInteiro;
+
 public class FilaDinamica {
     NoInteiro inicio;
 
